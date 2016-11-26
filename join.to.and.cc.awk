@@ -1,44 +1,54 @@
 #!/usr/bin/gawk -f
 
-#   Copyright 2016 Holger Detering <github@detering-springhoe.de>
+# Author:   Holger Detering
+# Purpose:  Reformat "To:" and "Cc:" header lines in a pretty way.
+# Usage:
+#           join.to.and.cc.awk file1 ...
 #
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#       http://www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an "AS IS" BASIS,
-#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
+# If no filename is given on the command line, the script expects the content
+# of the mail file on stdin.
 
-function do_print(header, value) {
+# Copyright 2016 Holger Detering <github@detering-springhoe.de>
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may not
+# use this file except in compliance with the License.  You may obtain a copy
+# of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
+# License for the specific language governing permissions and limitations
+# under the License.
+
+function do_print(prefix, value) {
   n = split(value, a, ",")
   for (i=1; i<=n; ++i) {
     gsub(/^[ \t]+|[ \t]+$/, "", a[i]);
+    gsub(/[ \t]+/, " ", a[i]);
     if (i < n)
       a[i] = a[i] ","
-    if (i == 1)
-      print header, a[i]
-    else
-      print "   ", a[i]
+    if (i == 2)
+      gsub( /[^ ]/, " ", prefix)
+    print prefix, a[i]
   }
+}
+
+function do_end_header(prefix, status, content) {
+  if (status == 1) {
+    do_print(prefix, content)
+    status = 2
+  }
+  return status
 }
 
 function do_end_to() {
-  if (in_to == 1) {
-    do_print("To:", joined_to)
-    in_to = 2
-  }
+  in_to = do_end_header("To:", in_to, joined_to)
 }
 
 function do_end_cc() {
-  if (in_cc == 1) {
-    do_print("Cc:", joined_cc)
-    in_cc = 2
-  }
+  in_cc = do_end_header("Cc:", in_cc, joined_cc)
 }
 
 function trim_and_add_line(result) {
@@ -50,7 +60,7 @@ function trim_and_add_line(result) {
   return result
 }
 
-BEGIN {
+BEGINFILE {
   in_to = 0
   joined_to = ""
   in_cc = 0
@@ -87,4 +97,9 @@ in_cc == 0 && /^Cc:/ {
   do_end_to()
   do_end_cc()
   print
+}
+
+ENDFILE {
+  do_end_to()
+  do_end_cc()
 }
