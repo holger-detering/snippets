@@ -16,6 +16,29 @@ join.to.and.cc.awk file ...
 If no filename is given on the command line, the script expects the content of
 the mail file on `stdin`.
 
+## muttprint.sh
+
+Drop-in replacement for muttprint.
+
+Requires:
+
++ formail (from procmail)
++ pdflatex
++ latex fonts:
+  * inconsolata
+  * lubre baskerville
++ latex packages:
+  * a4wide
+  * fancyhdr
+  * lastpage:
++ lp
+
+Usage in .muttrc:
+
+```
+set print_command=/path/to/muttprint.sh
+```
+
 ## License
 
 Copyright 2016 Holger Detering
