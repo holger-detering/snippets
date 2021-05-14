@@ -23,6 +23,8 @@ Drop-in replacement for muttprint.
 Requires:
 
 + formail (from procmail package)
++ fold
++ sed
 + pdflatex
 + LaTeX fonts:
   * inconsolata
