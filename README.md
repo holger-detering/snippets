@@ -22,15 +22,15 @@ Drop-in replacement for muttprint.
 
 Requires:
 
-+ formail (from procmail)
++ formail (from procmail package)
 + pdflatex
-+ latex fonts:
++ LaTeX fonts:
   * inconsolata
   * lubre baskerville
-+ latex packages:
++ LaTeX packages:
   * a4wide
   * fancyhdr
-  * lastpage:
+  * lastpage
 + lp
 
 Usage in .muttrc:
