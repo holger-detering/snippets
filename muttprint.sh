@@ -25,7 +25,8 @@ main() {
   mail_date=$(echo "$mail_content" | formail -czx Date:)
   formatted_date=$(date -d "$mail_date" +"%F %T %Z")
   mail_from=$(echo "$mail_content" | formail -czx From:)
-  mail_to=$(echo "$mail_content" | formail -czx To:)
+  mail_to=$(echo "$mail_content" | formail -czx To: | \
+    awk -v len=70 '{ if (length($0) > len) print substr($0, 1, len-3) "..."; else print; }')
   subject=$(echo "$mail_content" | formail -czx Subject: | sed 's/&/\\&/g')
 
   local tex_file=$TEMP_DIR/output.tex
