@@ -24,22 +24,25 @@ main() {
   local subject
   mail_date=$(echo "$mail_content" | formail -czx Date:)
   formatted_date=$(date -d "$mail_date" +"%F %T %Z")
-  mail_from=$(echo "$mail_content" | formail -czx From:)
+  mail_from=$(echo "$mail_content" | formail -czx From: | sed -e 's/_/\\_/g')
   mail_to=$(echo "$mail_content" | formail -czx To: | \
-    awk -v len=70 '{ if (length($0) > len) print substr($0, 1, len-3) "..."; else print; }')
-  subject=$(echo "$mail_content" | formail -czx Subject: | sed 's/&/\\&/g')
+    awk -v len=70 '{ if (length($0) > len) print substr($0, 1, len-3) "..."; else print; }' | \
+    sed -e 's/_/\\_/g')
+  subject=$(echo "$mail_content" | formail -czx Subject: | sed -e 's/&/\\&/g' -e 's/_/\\_/g')
 
   local tex_file=$TEMP_DIR/output.tex
   {
     cat <<'EOF'
 \documentclass[a4paper,12pt]{article}
 \usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
 \usepackage{baskervald}
 \usepackage{inconsolata}
 \usepackage{a4wide}
 \usepackage{fancyhdr}
 \usepackage{lastpage}
 \pagestyle{fancy}
+\DeclareUnicodeCharacter{2023}{-}
 EOF
 
   cat << EOF
