@@ -23,12 +23,12 @@ Drop-in replacement for muttprint.
 Requires:
 
 + formail (from procmail package)
-+ fold
++ fold (from coreutils package)
 + sed
 + pdflatex
 + LaTeX fonts:
   * inconsolata
-  * lubre baskerville
+  * libre baskerville
 + LaTeX packages:
   * a4wide
   * fancyhdr
