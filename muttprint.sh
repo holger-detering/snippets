@@ -28,7 +28,8 @@ main() {
   mail_to=$(echo "$mail_content" | formail -czx To: | \
     awk -v len=70 '{ if (length($0) > len) print substr($0, 1, len-3) "..."; else print; }' | \
     sed -e 's/_/\\_/g')
-  subject=$(echo "$mail_content" | formail -czx Subject: | sed -e 's/&/\\&/g' -e 's/_/\\_/g')
+  subject=$(echo "$mail_content" | formail -czx Subject: | \
+    sed -e 's/&/\\&/g' -e 's/_/\\_/g' -e 's/%/\\%/g')
 
   local tex_file=$TEMP_DIR/output.tex
   {
