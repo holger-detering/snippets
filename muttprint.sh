@@ -43,6 +43,7 @@ main() {
 \usepackage{fancyhdr}
 \usepackage{lastpage}
 \pagestyle{fancy}
+\DeclareUnicodeCharacter{2002}{ }
 \DeclareUnicodeCharacter{200B}{{\hskip 0pt}}
 \DeclareUnicodeCharacter{2023}{-}
 EOF
